@@ -1,0 +1,43 @@
+
+FROM node:14
+
+RUN npm install -g serve
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+WORKDIR /app/build
+
+ENV REACT_APP_BACKEND_URL=http://localhost:8080/ping
+
+CMD ["serve", "-s", "-l", "5000", "."]
+
+EXPOSE 5000
+
+docker build . -t frontend
+
+FROM golang:1.16-alpine
+
+WORKDIR /app
+
+RUN REACT_APP_BACKEND_URL http://localhost:5000/
+
+COPY . /app
+
+RUN go build
+
+EXPOSE 8080
+
+CMD ["./server"]
+
+docker build . -t backend
+
+docker run -p 5000:5000 frontend
+docker run -p 8080:8080 backend
