@@ -15,7 +15,7 @@ RUN npm run build
 
 WORKDIR /app/build
 
-ENV REACT_APP_BACKEND_URL=http://localhost:8080/ping
+ENV REACT_APP_BACKEND_URL=http://localhost:8080/
 
 CMD ["serve", "-s", "-l", "5000", "."]
 
